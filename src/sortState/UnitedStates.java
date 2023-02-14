@@ -34,28 +34,106 @@ public class UnitedStates
 	 */
 	public void sortStates(int front, int back) {
 		
+		int mid = (front+back)/2;
+		if (front < back) {
+			sortStates(front, mid);
+			sortStates(mid+1, back);
+			merge(front, mid, back);
+		}	
+	}
+	
+	
+	
+	
+	public void merge(int front, int mid,int back) {
+		State[] states2 = new State[states.size()];
+		int i = front;
+		int j = mid +1;
+		int k = front;
 		
+		while (i <= mid && j <= back) {
+			if (states.get(i).getName().compareTo(states.get(j).getName()) < 0) {
+				states2[k] = states.get(i);
+				i++;
+			}
+			else {
+				states2[k] = states.get(j);
+				j++;
+			}
+			k++;
+		}
 		
+		while (i <= mid) {
+			states2[k] = states.get(i);
+			i++;
+			k++;
+			
+		}
 		
-		
+		while (j <= back) {
+			states2[k] = states.get(j);
+			j++;
+			k++;
+			
+		}
+		for (int l = front ; l <= back; l++) {
+			states.set(l, states2[l]);
+		}
 		
 		
 		
 		
 	}
-	
-	
+
 	/*
 	 * Quick Sort
 	 * 
-	 * Use a selection sort to order the ArrayList
-	 * by the state's capital
+	 * Use a selection sort to order the ArrayList by the state's capital
 	 */
 	public void sortCapitals(int low, int high) {
+
+		if (high - low > 0) {
+			State piv = (State) states.get(low);
+			
+			
+			ArrayList<State> statesLower = new ArrayList();
+			ArrayList<State> statesHigher = new ArrayList();
+			
+			for(int i = low + 1; i < high; i++) {
+				if(states.get(i).getCapital().compareTo(piv.getCapital())>0) {
+					statesHigher.add(states.get(i));
+				}
+				else {
+					statesLower.add(states.get(i));
+				}
+			}
+			int savespot = 0;
+			for(int i = 0; i < statesLower.size(); i++) {
+				states.set(i+ low, statesLower.get(i));
+				savespot = i + low;
+			} 
+			
+			states.set(savespot + 1, piv);
+			
+			for (int i = 0; i < statesHigher.size();i++) {
+				states.set(i + savespot + 2, statesHigher.get(i));
+				
+			}
+			
+
+			
+			
+			
 		
-		
-		
-		
+			
+			
+			if (savespot > low) {
+				sortCapitals(low, savespot);
+			}
+			if (savespot + 2 < high) {
+				sortCapitals(savespot + 2 ,high);
+			}
+		}
 		
 		
 		
